@@ -14,7 +14,7 @@ export function StatefulContainer({
     let [isRecording, setIsRecording] = useState(false)
 
     useEffect(() => {
-        socket = (io.connect("http://127.0.0.1:4000"))
+        socket = (io.connect("http://192.168.31.151:4000"))
         socket.on("ship_control_stream", (data) => {
             onShipStreamed(data)
             // console.log(data)

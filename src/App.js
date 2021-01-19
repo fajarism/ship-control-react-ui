@@ -39,13 +39,26 @@ function App() {
           <StatefulContainer onShipStreamed={(data) => {
               // console.log(data)
               if(rudderCircularGaugeRef != null) {
+                let { rudder, yaw } = data
+
+                let newRudder = rudder
+                var newYaw = yaw
+              
+                if(rudder < 0) {
+                  newRudder = 360 + rudder
+                }
+
+                if(yaw < 0) {
+                  newYaw = 360 + yaw
+                }
+
                 rudderCircularGaugeRef.data([
-                  { value : data.rudder }
+                  { value : newRudder }
                 ])}
 
               if(yawCircularGaugeRef != null) {
                 yawCircularGaugeRef.data([
-                  { value : data.yaw }
+                  { value : newYaw }
                 ])}
               }
           }/>
