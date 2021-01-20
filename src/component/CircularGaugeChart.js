@@ -22,6 +22,7 @@ function CircularGaugeChart({onChartReady, title}) {
     circularGauge.data(dataSet)
     circularGauge.background().fill("#282c34")
     circularGauge.title().fontColor("white")
+    circularGauge.title().fontSize(18)
 
     // axis settings
     var axis = circularGauge.axis();

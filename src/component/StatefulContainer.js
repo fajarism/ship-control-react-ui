@@ -12,12 +12,17 @@ export function StatefulContainer({
 }){
     let [filename, setFilename] = useState("")
     let [isRecording, setIsRecording] = useState(false)
+    let [files, setFiles] = useState([])
 
     useEffect(() => {
-        socket = (io.connect("http://192.168.31.151:4000"))
+        socket = (io.connect("http://192.168.31.150:4000"))
         socket.on("ship_control_stream", (data) => {
             onShipStreamed(data)
             // console.log(data)
+        })
+
+        socket.on("ship_control_file_list", (data) => {
+            setFiles(data.files)
         })
 
         socket.on("ship_control_stream_recording_started", (data) => {
@@ -26,10 +31,22 @@ export function StatefulContainer({
   
         socket.on("ship_control_stream_recording_stopped", (data) => {
             console.log("socket received")
+            store.addNotification({
+                type : "success",
+                container : "top-right",
+                title : "Perekaman sukses",
+                message : `${data.filename} tersimpan`,
+                animationIn: ['animate__animated animate__fadeIn'],
+                animationOut: ['animate__animated animate__fadeOut'],
+                dismiss : {
+                    duration : 3000
+                }
+            })
             setIsRecording(false)
         })
 
         socket.on("ship_control_stream_recording_stopped_file_exists", (data) => {
+            console.log(data)
             store.addNotification({
                 type : "danger",
                 container : "top-right",
@@ -64,16 +81,18 @@ export function StatefulContainer({
     }
 
     return(
-        <div>
+        <div style={{
+            flex : 1,
+            display : 'flex',
+            flexDirection: 'column',
+            alignItems : 'flex-start'
+        }}>
             <FileControl 
+                files={files}
                 isRecording={isRecording}
                 onRecordButtonPress={() => onRecordButtonPress()}
                 filename={filename} 
                 onFilenameChanged={(newFilename) => setFilename(newFilename)}/>
         </div>
     )
-}
-
-let style = {
-
 }

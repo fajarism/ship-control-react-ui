@@ -7,12 +7,17 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "anychart-react": "^1.4.1",
+    "axios": "^0.21.1",
     "glamor": "^2.20.40",
+    "material-icons-react": "^1.0.4",
+    "moment": "^2.29.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-notifications": "^1.7.2",
     "react-notifications-component": "^3.0.3",
     "react-scripts": "4.0.1",
+    "react-sidebar": "^3.0.2",
+    "react-web-vector-icons": "^1.0.2",
     "socket.io-client": "^3.0.5",
     "web-vitals": "^0.2.4"
   },
@@ -20,7 +25,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "startwebpack": "webpack-dev-server --mode development --open",
+    "buildwebpack": "webpack --mode production"
   },
   "eslintConfig": {
     "extends": [
