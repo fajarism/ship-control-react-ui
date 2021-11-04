@@ -2,15 +2,15 @@ import React from 'react'
 import ReactNofitication, { store } from "react-notifications-component"
 import { FlexColumn } from './FlexColumn'
 import { FlexRow } from './FlexRow'
-import MaterialIcon from 'material-icons-react'
 import moment from 'moment'
 import axios from 'axios'
  
+import DownloadButton from "../../src/assets/images/download.svg"
 
-export function FileControlSingleFileItem({file}) {
+export function FileControlSingleFileItem({file, address}) {
 
     let onDownloadButtonClick = async () => {
-        window.location.href = `http://192.168.31.150:4000/${encodeURI(file.filename)}/download`
+        window.location.href = `${address}/download/${encodeURI(file.filename)}`
         // let response = await axios.get(`http://192.168.31.150:4000/${encodeURI(file.filename)}/download`)
         // if(response.status === 404) {
         //     store.addNotification({
@@ -47,7 +47,7 @@ export function FileControlSingleFileItem({file}) {
             </FlexColumn>
             
             <FlexColumn className="downloadbtn" style={style.downloadcontainer} onClick={() => onDownloadButtonClick()}>
-                <MaterialIcon icon="download" size={24} color={'orange'}/>
+                <img width={24} height={24} style={style.downloadbutton} src={DownloadButton}/>
             </FlexColumn>
         </FlexRow>
     )
@@ -59,6 +59,11 @@ let style = {
         borderRadius : 8,
         padding : 16,
         marginBottom : 8
+    },
+
+    downloadbutton : {
+        fill : 'orange',
+        alignSelf : 'center',
     },
 
     filename : {

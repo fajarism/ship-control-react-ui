@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { FileControlSingleFileItem } from "./FileControlSingleFileItem"
 import { FlexColumn } from "./FlexColumn"
 import { FlexRow } from "./FlexRow"
@@ -8,20 +8,30 @@ export function FileControl({
     filename,
     onRecordButtonPress,
     onFilenameChanged,
+    onAddressSaved,
+    onAddressChanged,
+    address,
+    ipAddress,
     files = []
 }){
     return(
         <FlexColumn style={style.filecontrolcontainer}>
+            <p style={style.filenametitle}>IP Address</p>
+            <FlexRow style={style.addresscontainer}>
+                <input style={style.filename} onChange={(event) => onAddressChanged(event.target.value)} value={address}/>
+                <button style={{minWidth: 125}} onClick={() => onAddressSaved()}>{`Save Address`}</button>
+            </FlexRow>
+
             <p style={style.filenametitle}>Filename</p>
             <FlexRow style={style.inputfilecontainer}>
                 <input style={style.filename} onChange={(event) => onFilenameChanged(event.target.value)} value={filename}/>
-                <button onClick={() => onRecordButtonPress()}>{isRecording ? `Stop recording` : `Record`}</button>
+                <button onClick={() => onRecordButtonPress()}>{isRecording ? `Stop` : `Record`}</button>
             </FlexRow>
 
             <p style={style.directorytitle}>File Directory</p>
             <FlexColumn style={style.filedirectorycontainer}>
                 {files.map((item, index) => {
-                    return <FileControlSingleFileItem file={item} key={`file-${index}`}/>
+                    return <FileControlSingleFileItem address={ipAddress} file={item} key={`file-${index}`}/>
                 })}
             </FlexColumn>
         </FlexColumn>
@@ -34,12 +44,15 @@ let style = {
     },
 
     filedirectorycontainer : {
-        overflow: 'scroll',
         height: '100%'
     },
 
     inputfilecontainer : {
         marginTop : 8
+    },
+
+    addresscontainer : {
+        marginBottom : 8
     },
 
     filenametitle : {

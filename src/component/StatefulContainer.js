@@ -4,6 +4,7 @@ import { io } from "socket.io-client"
 import 'react-notifications-component/dist/theme.css'
 
 import { FileControl } from "./FileControl"
+import Utils from "../utilities/Utils"
 
 let socket
 
@@ -14,8 +15,12 @@ export function StatefulContainer({
     let [isRecording, setIsRecording] = useState(false)
     let [files, setFiles] = useState([])
 
+    let address = localStorage.getItem(Utils.VALUE.ADDRESSKEY) || '192.168.0.2'
+    let [httpAddress, setAddress] = useState(`http://${address}`)
+    let [tempAddress, setTempAddress] = useState(address)
+
     useEffect(() => {
-        socket = (io.connect("http://192.168.31.150:4000"))
+        socket = (io.connect(httpAddress))
         socket.on("ship_control_stream", (data) => {
             onShipStreamed(data)
             // console.log(data)
@@ -30,7 +35,7 @@ export function StatefulContainer({
         })
   
         socket.on("ship_control_stream_recording_stopped", (data) => {
-            console.log("socket received")
+
             store.addNotification({
                 type : "success",
                 container : "top-right",
@@ -46,7 +51,7 @@ export function StatefulContainer({
         })
 
         socket.on("ship_control_stream_recording_stopped_file_exists", (data) => {
-            console.log(data)
+
             store.addNotification({
                 type : "danger",
                 container : "top-right",
@@ -68,7 +73,7 @@ export function StatefulContainer({
     },[socket])
 
     let onRecordButtonPress = () => {
-        console.log(`clicked ${isRecording}`)
+
         if(!isRecording) {
             socket.emit("ship_control_stream_recording_start", {
                 filename
@@ -80,6 +85,27 @@ export function StatefulContainer({
         }
     }
 
+    let onAddressSaved = () => {
+        localStorage.setItem(Utils.VALUE.ADDRESSKEY, tempAddress)
+        setAddress(tempAddress)
+        store.addNotification({
+            type : "success",
+            container : "top-right",
+            message : "IP address berhasil disimpan",
+            animationIn: ['animate__animated animate__fadeIn'],
+            animationOut: ['animate__animated animate__fadeOut'],
+            dismiss : {
+                duration : 3000
+            }
+        })
+
+        window.location.reload()
+    }
+
+    let onAddressChanged = (newAddress) => {
+        setTempAddress(newAddress)
+    }
+
     return(
         <div style={{
             flex : 1,
@@ -88,6 +114,10 @@ export function StatefulContainer({
             alignItems : 'flex-start'
         }}>
             <FileControl 
+                address={tempAddress}
+                ipAddress={httpAddress}
+                onAddressChanged={(newAddress) => onAddressChanged(newAddress)}
+                onAddressSaved={(newAddress) => onAddressSaved(newAddress)}
                 files={files}
                 isRecording={isRecording}
                 onRecordButtonPress={() => onRecordButtonPress()}

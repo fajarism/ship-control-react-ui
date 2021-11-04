@@ -26,6 +26,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "production" : "react-scripts build && rimraf /Users/roka/Project/2021/bth/ship-control/ship-control-react-ui-production/static/* && cp -r build/* /Users/roka/Project/2021/bth/ship-control/ship-control-react-ui-production",
     "startwebpack": "webpack-dev-server --mode development --open",
     "buildwebpack": "webpack --mode production"
   },
