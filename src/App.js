@@ -14,6 +14,8 @@ function App() {
   let rudderTextRef = useRef()
   let yawCircularGaugeRef
   let yawTextRef = useRef()
+  let rudderCircularGaugeRef2
+  let rudderTextRef2 = useRef()
 
   return (
     <div className="App">
@@ -44,25 +46,37 @@ function App() {
                 display : "flex",
                 flexDirection: "column"
               }}>
-                <CircularGaugeChart onChartReady={(chart) => rudderCircularGaugeRef = chart} title="Rudder"/>
+                <CircularGaugeChart onChartReady={(chart) => rudderCircularGaugeRef = chart} title="Rudder 1"/>
                 <p ref={rudderTextRef}></p>
               </div>
               <div style={{
                 marginLeft : 16
               }}>
+                <CircularGaugeChart onChartReady={(chart) => rudderCircularGaugeRef2 = chart} title="Rudder 2"/>
+                <p ref={rudderTextRef2}></p>
+              </div>
+            </div>
+            <div style={{
+              display : "flex",
+              flexDirection : "row",
+              flex : 1
+            }}>
+              <div style={{
+              }}>
                 <CircularGaugeChart onChartReady={(chart) => yawCircularGaugeRef = chart} title="Yaw"/>
                 <p ref={yawTextRef}></p>
-            </div>
+              </div>
             </div>
             
           </div>
           <StatefulContainer onShipStreamed={(data) => {
               // console.log(data)
               if(rudderCircularGaugeRef != null) {
-                let { rudder, yaw } = data
+                let { rudder, yaw, rudder2 } = data
 
                 let newRudder = rudder
                 var newYaw = yaw
+                let newRudder2 = rudder2
               
                 if(rudder < 0) {
                   newRudder = 360 + rudder
@@ -72,13 +86,23 @@ function App() {
                   newYaw = 360 + yaw
                 }
 
+                if(rudder2 < 0) {
+                  newRudder2 = 360 + rudder2
+                }
+
                 rudderTextRef.current.innerHTML = newRudder.toFixed(3)
                 yawTextRef.current.innerHTML = newYaw.toFixed(3)
+                rudderTextRef2.current.innerHTML = newRudder2.toFixed(3)
                 
                 rudderCircularGaugeRef.data([
                   { value : newRudder }
-                ])}
-
+                ])
+                
+                rudderCircularGaugeRef2.data([
+                  { value : newRudder2 }
+                ])
+              }
+                
               if(yawCircularGaugeRef != null) {
                 yawCircularGaugeRef.data([
                   { value : newYaw }

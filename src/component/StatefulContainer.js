@@ -23,7 +23,7 @@ export function StatefulContainer({
         socket = (io.connect(httpAddress))
         socket.on("ship_control_stream", (data) => {
             onShipStreamed(data)
-            // console.log(data)
+            console.log(data)
         })
 
         socket.on("ship_control_file_list", (data) => {
